@@ -66,7 +66,11 @@ class DiscourseParser():
 
         ''' 1.1 Connective classifier '''
 
+<<<<<<< HEAD
         print (("==> Connective classifier:"))
+=======
+        print ("==> Connective classifier:")
+>>>>>>> a99b6aaf3082be54c7087c257433c33c973fa383
 
         conn_clf_feature_function = _conn_clf_feature_function
         conn_clf_feat_path = config.PARSER_CONN_CLF_FEATURE
@@ -82,7 +86,11 @@ class DiscourseParser():
 
         ''' 1.2 Arg1 position classifier '''
 
+<<<<<<< HEAD
         print (("\n==> Arg1 Position Classifier:"))
+=======
+        print ("\n==> Arg1 Position Classifier:")
+>>>>>>> a99b6aaf3082be54c7087c257433c33c973fa383
 
         arg_position_feat_func = _arg_position_feature_function
         arg_position_feat_path = config.PARSER_ARG_POSITION_FEATURE
@@ -99,7 +107,11 @@ class DiscourseParser():
 
         ''' 1.3.1 SS Arguments Extractor '''
 
+<<<<<<< HEAD
         print (("\n==> SS Arguments Extractor:"))
+=======
+        print ("\n==> SS Arguments Extractor:")
+>>>>>>> a99b6aaf3082be54c7087c257433c33c973fa383
 
         # split the SS_conns_list into SS_conns_parallel_list, SS_conns_not_parallel_list
         # parallel connectives: if..then; either..or;...
@@ -128,7 +140,11 @@ class DiscourseParser():
 
         ''' 1.3.2.1 PS Arg2 extractor '''
 
+<<<<<<< HEAD
         print (("\n==> PS Arg2 Extractor:"))
+=======
+        print ("\n==> PS Arg2 Extractor:")
+>>>>>>> a99b6aaf3082be54c7087c257433c33c973fa383
 
         # initialize Arg1, Arg2 for PS:
         # previous sentence as Arg1, the sentence which contains the connective as Arg2
@@ -152,7 +168,11 @@ class DiscourseParser():
 
         ''' 1.3.2.2 PS Arg1 extractor '''
 
+<<<<<<< HEAD
         print (("\n==> PS Arg1 Extractor:"))
+=======
+        print ("\n==> PS Arg1 Extractor:")
+>>>>>>> a99b6aaf3082be54c7087c257433c33c973fa383
 
         PS_Arg1_feat_func = _ps_arg1_extractor_feat_func
         PS_Arg1_feat_path = config.PARSER_PS_ARG1_FEATURE
@@ -172,7 +192,11 @@ class DiscourseParser():
 
         ''' 1.4 Explicit Sense Classifier '''
 
+<<<<<<< HEAD
         print (("\n==> Explicit Sense Classifier:"))
+=======
+        print ("\n==> Explicit Sense Classifier:")
+>>>>>>> a99b6aaf3082be54c7087c257433c33c973fa383
 
         # all discourse connective: SS + PS
         #conns_list_args:[(source, DocID, sent_index, conn_indices, Arg1, Arg2)...]
@@ -197,7 +221,11 @@ class DiscourseParser():
 
         ''' 2.1 Non-Explicit Sense classifier: on original arguments '''
 
+<<<<<<< HEAD
         print (("\n==> Non-Explicit Sense classifier: on original arguments"))
+=======
+        print ("\n==> Non-Explicit Sense classifier: on original arguments")
+>>>>>>> a99b6aaf3082be54c7087c257433c33c973fa383
 
         # obtain all adjacent sentence pairs within each paragraph, but not identified in any Explicit relation
         # adjacent_non_exp_list: [(DocID,sent1_index,sent2_index) ]
@@ -231,7 +259,11 @@ class DiscourseParser():
 
         ''' 2.2.1 Implicit Arg1 Extractor'''
 
+<<<<<<< HEAD
         print (("\n==> Implicit Arg1 Extractor:"))
+=======
+        print ("\n==> Implicit Arg1 Extractor:")
+>>>>>>> a99b6aaf3082be54c7087c257433c33c973fa383
 
         implicit_arg1_feat_func = _implicit_arg1_feat_func
         implicit_arg1_feat_path = config.PARSER_IMPLICIT_ARG1_FEATURE
@@ -249,7 +281,11 @@ class DiscourseParser():
 
         ''' 2.2.2 Implicit Arg2 Extractor'''
 
+<<<<<<< HEAD
         print (("\n==> Implicit Arg2 Extractor:"))
+=======
+        print ("\n==> Implicit Arg2 Extractor:")
+>>>>>>> a99b6aaf3082be54c7087c257433c33c973fa383
 
         implicit_arg2_feat_func = _implicit_arg2_feat_func
         implicit_arg2_feat_path = config.PARSER_IMPLICIT_ARG2_FEATURE
@@ -270,7 +306,11 @@ class DiscourseParser():
 
         ''' 2.3 Non-Explicit Sense classifier: on refined arguments'''
 
+<<<<<<< HEAD
         print (("\n==> Non-Explicit Sense Classifier: on refined arguments"))
+=======
+        print ("\n==> Non-Explicit Sense Classifier: on refined arguments")
+>>>>>>> a99b6aaf3082be54c7087c257433c33c973fa383
 
         # change arguments from document offset to (sent_index, sent_offset).
         self.non_explicit_relations = parser_util.change_arg_doc_offset(self.non_explicit_relations, self.parse_dict)
