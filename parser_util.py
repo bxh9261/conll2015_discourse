@@ -30,39 +30,40 @@ def _get_doc_conns(document):
 # identify connectives in sentence (sent_tokens)
 # return indices: [[2, 3], [0]]
 def _check_connectives(sent_tokens):
-    sent_tokens = [word.lower() for word in sent_tokens ]
+    sent_tokens = [word.lower() for word in sent_tokens]
     indices = []
-    tagged = set([])
+    tagged = set()
     sortedConn = Connectives_dict().sorted_conns_list
     for conn in sortedConn:
         if '..' in conn:
             c1, c2 = conn.split('..')
-            c1_indice = util.getSpanIndecesInSent(c1.split(), sent_tokens)#[[7]]
-            c2_indice = util.getSpanIndecesInSent(c2.split(), sent_tokens)#[[10]]
-            if c1_indice!= [] and c2_indice != []:
+            c1_indice = util.getSpanIndecesInSent(c1.split(), sent_tokens)  # [[7]]
+            c2_indice = util.getSpanIndecesInSent(c2.split(), sent_tokens)  # [[10]]
+            if c1_indice and c2_indice:
                 if c1_indice[0][0] < c2_indice[0][0]:
-                    temp = set([t for t in (c1_indice[0]+c2_indice[0]) ])
-                    if tagged & temp == set([]):
-                        indices.append(c1_indice[0]+c2_indice[0])# [[7], [10]]
+                    temp = set(c1_indice[0]) | set(c2_indice[0])
+                    if not (tagged & temp):
+                        indices.append(list(set(c1_indice[0]) | set(c2_indice[0])))
                         tagged = tagged.union(temp)
         else:
-            c_indice = util.getSpanIndecesInSent(conn.split(), sent_tokens)#[[2,6],[1,3],...]
-            if c_indice !=[]:
+            c_indice = util.getSpanIndecesInSent(conn.split(), sent_tokens)  # [[2,6],[1,3],...]
+            if c_indice:
                 tt = []
                 for item in c_indice:
-                    if set(item) & tagged == set([]):
+                    if not (set(item) & tagged):
                         tt.append(item)
                 c_indice = tt
 
-                if c_indice != []:
-                    indices.extend([item for item in c_indice])#[([2,6], 'for instance'), ....]
+                if c_indice:
+                    indices.extend([item for item in c_indice])  # [([2,6], 'for instance'), ....]
                     tagged = tagged.union(set([r for t in c_indice for r in t]))
     return indices
+
 
 #[(DocID, sent_index, conn_indices), ()..]
 def conn_clf_print_feature(parse_dict, conns_list, feature_function, to_file):
 
-    print "\tExtract features: [..]",
+    print (("\tExtract features: [..]"),)
     example_list = []
     for DocID, sent_index, conn_indices in conns_list:
         feature = feature_function(parse_dict, DocID, sent_index, conn_indices)
@@ -70,7 +71,7 @@ def conn_clf_print_feature(parse_dict, conns_list, feature_function, to_file):
         example_list.append(example)
     # write example_list to file
     util.write_example_list_to_file(example_list, to_file)
-    print "\r\tExtract features: [OK]"
+    print (("\r\tExtract features: [OK]"))
 
 def conn_clf_read_model_output(conn_clf_model_output, conns_list):
     # ['yes', 'no'...]
@@ -83,7 +84,7 @@ def conn_clf_read_model_output(conn_clf_model_output, conns_list):
 
 def arg_position_print_feature(parse_dict, conns_list, feature_function, to_file):
 
-    print "\tExtract features: [..]",
+    print (("\tExtract features: [..]"),)
     example_list = []
     for DocID, sent_index, conn_indices in conns_list:
         feature = feature_function(parse_dict, DocID, sent_index, conn_indices)
@@ -91,7 +92,7 @@ def arg_position_print_feature(parse_dict, conns_list, feature_function, to_file
         example_list.append(example)
     # write example_list to file
     util.write_example_list_to_file(example_list, to_file)
-    print "\r\tExtract features: [OK]"
+    print (("\r\tExtract features: [OK]"))
 
 def arg_position_read_model_output(arg_position_model_output, conns_list):
     SS_conns_list = []
@@ -139,13 +140,13 @@ def get_all_connectives_for_NT(parse_dict, conns_list):
 
 def constituent_print_feature(parse_dict, connectives, feature_function, to_file):
 
-    print "\tExtract features: [..]",
+    print (("\tExtract features: [..]"),)
 
     example_list = []
 
     # total = float(len(connectives))
     for curr_index, connective in enumerate(connectives):
-        # print "process: %.2f%%.\r" % ((curr_index + 1)/total*100),
+        # print ("process: %.2f%%.\r") % ((curr_index + 1)/total*100),
 
         constituents = _get_constituents(parse_dict, connective)
         constituents = sorted(constituents, key=lambda constituent: constituent.indices[0])   # sort by age
@@ -158,7 +159,7 @@ def constituent_print_feature(parse_dict, connectives, feature_function, to_file
     # write example_list to file
     util.write_example_list_to_file(example_list, to_file)
 
-    print "\r\tExtract features: [OK]"
+    print (("\r\tExtract features: [OK]"))
 
 
 def constituent_read_model_output(
@@ -201,7 +202,12 @@ def constituent_read_model_output(
     for i, conn in enumerate(conns_list):
         DocID, sent_index, conn_indices = conn
 
-        Arg1_list, Arg2_list = relation_dict[i]
+        if i in relation_dict:
+            Arg1_list, Arg2_list = relation_dict[i]
+        else:
+            pass
+            break
+
 
         Arg1_list = merge_NT_Arg(Arg1_list, parse_dict, DocID, sent_index)
         Arg2_list = merge_NT_Arg(Arg2_list, parse_dict, DocID, sent_index)
@@ -213,11 +219,11 @@ def constituent_read_model_output(
             # Arg1 or Arg2 is not identified
             # temp.append((source, DocID, sent_index, conn_indices, Arg1_list, Arg2_list))
             # if Arg1_list == []:
-            #     print "Arg1###" + DocID, sent_index, conn_indices
+            #     print ("Arg1###") + DocID, sent_index, conn_indices
             # if Arg2_list == []:
-            #     print "Arg2###" + DocID, sent_index, conn_indices
+            #     print ("Arg2###") + DocID, sent_index, conn_indices
             # if Arg1_list == [] and Arg2_list == []:
-            #     print "Both###" + DocID, sent_index, conn_indices
+            #     print ("Both###") + DocID, sent_index, conn_indices
 
 
     return temp
@@ -328,7 +334,7 @@ def get_Args_for_PS_conns(parse_dict, PS_conns_list):
 
 def explicit_clf_print_feature(parse_dict, conns_list_args, feature_function, to_file):
 
-    print "\tExtract features: [..]",
+    print (("\tExtract features: [..]"),)
 
     example_list = []
     for conn in conns_list_args:
@@ -340,7 +346,7 @@ def explicit_clf_print_feature(parse_dict, conns_list_args, feature_function, to
     # write example_list to file
     util.write_example_list_to_file(example_list, to_file)
 
-    print "\r\tExtract features: [OK]"
+    print (("\r\tExtract features: [OK]"))
 
 
 def explicit_clf_read_model_output(explicit_model_output, conns_list_args):
@@ -420,7 +426,7 @@ def test_explicit_relations(explicit_relations):
         output.write('%s\n' % json.dumps(relation))
     output.close()
 
-    print "-" * 120 + "\n Explicit Relation \n" + "-" * 120
+    print (("-") * 120 + "\n Explicit Relation \n" + "-" * 120)
     cmd = "python "+config.SCORER_PATH+" " \
           " "+config.JSON_GOLD_EXPLICIT_PATH+" "+config.PARSER_EXPLICIT_REATION_PATH+" "
     os.system(cmd)
@@ -431,7 +437,7 @@ def test_non_explicit_relations(non_explicit_relations):
         output.write('%s\n' % json.dumps(relation))
     output.close()
 
-    print "-" * 120 + "\n Non-Explicit Relation \n" + "-" * 120
+    print (("-") * 120 + "\n Non-Explicit Relation \n" + "-" * 120)
     cmd = "python "+config.SCORER_PATH+" " \
           " "+config.JSON_GOLD_NON_EXPLICIT_PATH+" "+config.PARSER_NON_EXPLICIT_REATION_PATH+" "
     os.system(cmd)
@@ -442,7 +448,7 @@ def test_relation(relations):
         output.write('%s\n' % json.dumps(relation))
     output.close()
 
-    print "-" * 120 + "\n All Relation \n" + "-" * 120
+    print (("-") * 120 + "\n All Relation \n" + "-" * 120)
     cmd = "python "+config.SCORER_PATH+" " \
           " "+config.PDTB_ORIGIN_DEV_PATH+" "+config.PARSER_REATION_PATH+" "
     os.system(cmd)
@@ -529,7 +535,7 @@ def _non_explicit_Arg_offset_in_sent(parse_dict, DocID, sent_index):
 
 def non_explicit_clf_print_feature(parse_dict, non_explicit_relations, feature_function, non_explicit_context_dict, prev_context_conn, to_file):
 
-    print "\tExtract features: [..]",
+    print (("\tExtract features: [..]"),)
 
     example_list = []
     for relation in non_explicit_relations:
@@ -541,7 +547,7 @@ def non_explicit_clf_print_feature(parse_dict, non_explicit_relations, feature_f
     # write example_list to file
     util.write_example_list_to_file(example_list, to_file)
 
-    print "\r\tExtract features: [OK]"
+    print (("\r\tExtract features: [OK]"))
 
 
 def non_explicit_read_model_output(non_explicit_model_output, parse_dict, non_explicit_relations):
@@ -571,8 +577,8 @@ def divide_non_explicit_relations(non_explicit_relations, parse_dict):
             EntRel_relations.append(relation)
         else:
             Implicit_AltLex_relations.append(relation)
-    # print "EntRel_relations:" + str(len(EntRel_relations))
-    # print "Implicit_AltLex_relations:" + str(len(Implicit_AltLex_relations))
+    # print ("EntRel_relations:") + str(len(EntRel_relations))
+    # print ("Implicit_AltLex_relations:") + str(len(Implicit_AltLex_relations))
 
     return EntRel_relations, Implicit_AltLex_relations
 
@@ -581,7 +587,7 @@ def attri_print_feature(parse_dict, relations, attribution_feat_func, to_file):
     total = float(len(relations))
     for curr_index, relation in enumerate(relations):
         sys.stdout.flush()
-        print "Extract Attribution Feature: %.2f%%.\r" % ((curr_index + 1)/total*100),
+        print (("Extract Attribution Feature: %.2f%%.\r") % ((curr_index + 1)/total*100),)
         for arg_clauses in _get_arg_clauses(parse_dict, relation):
             if arg_clauses == []: continue
             for clause_index in range(len(arg_clauses.clauses)):
@@ -593,7 +599,7 @@ def attri_print_feature(parse_dict, relations, attribution_feat_func, to_file):
                 example_list.append(example)
     # write example_list to file
     util.write_example_list_to_file(example_list, to_file)
-    print "Attribution Feature : Done!"
+    print (("Attribution Feature : Done!"))
 
 def attri_read_model_output(attribution_feat_path, attribution_model_output, parse_dict, non_explicit_relations):
     feat_file = open(attribution_feat_path)
@@ -670,13 +676,13 @@ def attri_read_model_output(attribution_feat_path, attribution_model_output, par
         DocID = relation["DocID"]
 
         if (relation_ID, "Arg1") not in relation_dict:
-            print "11"
+            print (("11"))
             Arg1_offset_in_sent = [item[4] for item in relation["Arg1"]["TokenList"]]
         else:
             Arg1_offset_in_sent = relation_dict[(relation_ID, "Arg1")]
 
         if (relation_ID, "Arg2") not in relation_dict:
-            print "22"
+            print (("22"))
             Arg2_offset_in_sent = [item[4] for item in relation["Arg2"]["TokenList"]]
         else:
             Arg2_offset_in_sent = relation_dict[(relation_ID, "Arg2")]
@@ -700,8 +706,8 @@ def attri_read_model_output(attribution_feat_path, attribution_model_output, par
 
 
         # print DocID, Arg1_sent_index
-        # print " ".join(Arg1_sent_text)
-        # print " ".join(Arg1_text)
+        # print (" ").join(Arg1_sent_text)
+        # print (" ").join(Arg1_text)
 
         temp.append(relation)
 
@@ -785,7 +791,7 @@ def _arg_clauses(parse_dict, relation, Arg):
 
 
     # print DocID, sent_index
-    # print " ".join([parse_dict[DocID]["sentences"][sent_index]["words"][index][0] for index in Arg_token_indices])
+    # print (" ").join([parse_dict[DocID]["sentences"][sent_index]["words"][index][0] for index in Arg_token_indices])
     # print clauses
 
     return Arg_Clauses(relation_ID, Arg, DocID, sent_index, clauses)
@@ -983,13 +989,13 @@ def _change_feature_dimension(test_file_path, n_features):
 
 def ps_arg2_extractor_print_feature(parse_dict, PS_conns_list_args, PS_Arg2_feat_func, to_file):
 
-    print "\tExtract features: [..]",
+    print (("\tExtract features: [..]"),)
 
     PS_relations = get_PS_relations_by_PS_conns_list(PS_conns_list_args)
     example_list = []
     # total = float(len(PS_relations))
     for curr_index, relation in enumerate(PS_relations):
-        # print "process: %.2f%%.\r" % ((curr_index + 1)/total*100),
+        # print ("process: %.2f%%.\r") % ((curr_index + 1)/total*100),
         for arg_clauses in _get_ps_arg2_clauses(parse_dict, relation):
             if arg_clauses == []: continue
             for clause_index in range(len(arg_clauses.clauses)):
@@ -1003,7 +1009,7 @@ def ps_arg2_extractor_print_feature(parse_dict, PS_conns_list_args, PS_Arg2_feat
     # write example_list to file
     util.write_example_list_to_file(example_list, to_file)
 
-    print "\r\tExtract features: [OK]"
+    print (("\r\tExtract features: [OK]"))
 
 
 def get_PS_relations_by_PS_conns_list(PS_conns_list_args):
@@ -1101,7 +1107,7 @@ def _ps_arg2_clauses(parse_dict, relation, Arg):
         if flag == 0:
             clause_list.append(clause_indices)
 
-    # print " ".join([parse_dict[DocID]["sentences"][sent_index]["words"][index][0] for index in range(sent_length)])
+    # print (" ").join([parse_dict[DocID]["sentences"][sent_index]["words"][index][0] for index in range(sent_length)])
     # print clause_list
     # print Arg_list
 
@@ -1235,13 +1241,13 @@ def get_non_explicit_context_dict(explicit_relations):
 
 
 def ps_arg1_extractor_print_feature(parse_dict, PS_conns_list_args, PS_Arg1_feat_func, to_file):
-    print "\tExtract features: [..]",
+    print (("\tExtract features: [..]"),)
 
     PS_relations = get_PS_relations_by_PS_conns_list(PS_conns_list_args)
     example_list = []
     # total = float(len(PS_relations))
     for curr_index, relation in enumerate(PS_relations):
-        # print "process: %.2f%%.\r" % ((curr_index + 1)/total*100),
+        # print ("process: %.2f%%.\r") % ((curr_index + 1)/total*100),
         for arg_clauses in _get_ps_arg1_clauses(parse_dict, relation):
             if arg_clauses == []: continue
             for clause_index in range(len(arg_clauses.clauses)):
@@ -1255,7 +1261,7 @@ def ps_arg1_extractor_print_feature(parse_dict, PS_conns_list_args, PS_Arg1_feat
     # write example_list to file
     util.write_example_list_to_file(example_list, to_file)
 
-    print "\r\tExtract features: [OK]"
+    print (("\r\tExtract features: [OK]"))
 
 def _get_ps_arg1_clauses(parse_dict, relation):
     return [_ps_arg1_clauses(parse_dict, relation, "Arg1")]
@@ -1421,13 +1427,13 @@ def ps_arg1_extractor_read_model_output(PS_Arg1_feat_path, PS_Arg1_model_output,
 
 def implicit_arg1_print_feature(parse_dict, Implicit_AltLex_relations, implicit_arg1_feat_func, to_file):
 
-    print "\tExtract features: [..]",
+    print (("\tExtract features: [..]"),)
 
     example_list = []
     # total = float(len(Implicit_AltLex_relations))
     for curr_index, relation in enumerate(Implicit_AltLex_relations):
         sys.stdout.flush()
-        # print "implicit_arg1 Feature: %.2f%%.\r" % ((curr_index + 1)/total*100),
+        # print ("implicit_arg1 Feature: %.2f%%.\r") % ((curr_index + 1)/total*100),
         for arg_clauses in _get_arg1_clauses(parse_dict, relation):
             if arg_clauses == []: continue
             for clause_index in range(len(arg_clauses.clauses)):
@@ -1440,7 +1446,7 @@ def implicit_arg1_print_feature(parse_dict, Implicit_AltLex_relations, implicit_
     # write example_list to file
     util.write_example_list_to_file(example_list, to_file)
 
-    print "\r\tExtract features: [OK]"
+    print (("\r\tExtract features: [OK]"))
 
 
 
@@ -1536,13 +1542,13 @@ def implicit_arg1_read_model_output(implicit_arg1_feat_path, implicit_arg1_model
 
 def implicit_arg2_print_feature(parse_dict, Implicit_AltLex_relations, implicit_arg2_feat_func, to_file):
 
-    print "\tExtract features: [..]",
+    print (("\tExtract features: [..]"),)
 
     example_list = []
     # total = float(len(Implicit_AltLex_relations))
     for curr_index, relation in enumerate(Implicit_AltLex_relations):
         sys.stdout.flush()
-        # print "implicit_arg2 Feature: %.2f%%.\r" % ((curr_index + 1)/total*100),
+        # print ("implicit_arg2 Feature: %.2f%%.\r") % ((curr_index + 1)/total*100),
         for arg_clauses in _get_arg2_clauses(parse_dict, relation):
             if arg_clauses == []: continue
             for clause_index in range(len(arg_clauses.clauses)):
@@ -1555,7 +1561,7 @@ def implicit_arg2_print_feature(parse_dict, Implicit_AltLex_relations, implicit_
     # write example_list to file
     util.write_example_list_to_file(example_list, to_file)
 
-    print "\r\tExtract features: [OK]"
+    print (("\r\tExtract features: [OK]"))
 
 
 

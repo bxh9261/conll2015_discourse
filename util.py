@@ -24,7 +24,7 @@ def singleton(cls):
 def getSpanIndecesInSent(span_tokens, sent_tokens):
     indice = []
     span_length = len(span_tokens); sent_length = len(sent_tokens)
-    for i in xrange(len(sent_tokens)):
+    for i in range(len(sent_tokens)):
         if (i+span_length) <= sent_length  and sent_tokens[i:i+span_length] == span_tokens:
             indice.append(range(i,i+span_length))
     return indice

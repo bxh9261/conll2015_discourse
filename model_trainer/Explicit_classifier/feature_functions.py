@@ -2,7 +2,7 @@
 from feature import Feature
 import util
 from explicit_dict import Explicit_dict
-import exp_dict_util as dict_util
+import model_trainer.Explicit_classifier.exp_dict_util as dict_util
 from syntax_tree import Syntax_tree
 
 

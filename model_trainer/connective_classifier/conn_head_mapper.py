@@ -383,5 +383,5 @@ if __name__ == '__main__':
     chm = ConnHeadMapper()
     raw_connective = "if and when"
     head_connective, indices = chm.map_raw_connective(raw_connective)
-    print head_connective , indices
+    print ((head_connective , indices))
 	

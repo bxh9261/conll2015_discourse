@@ -1,7 +1,7 @@
 #coding:utf-8
 from implicit_arg2_dict import Implicit_arg2_dict
 from feature import Feature
-import implicit_arg2_dict_util as dict_util
+import model_trainer.Implicit_Arg2_extractor.implicit_arg2_dict_util as dict_util
 import util
 
 def _all_features(arg_clauses, clause_index, parse_dict):

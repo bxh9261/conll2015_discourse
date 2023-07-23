@@ -51,18 +51,18 @@ class Connectives_dict():
 
 
 
-        # print "connective dict is loaded ...."
+        # print ("connective dict is loaded ....")
 
     def get_sorted_conns_list(self):
-        # print "loading sorted_conns_list ..."
+        # print ("loading sorted_conns_list ...")
         return util.load_list_from_file(config.SORTED_ExpConn_PATH)
 
     def get_CPOS_dict(self):
-        # print "loading c pos ..."
+        # print ("loading c pos ...")
         return util.load_dict_from_file(config.CONNECTIVE_DICT_CPOS_PATH)
 
     def get_prev_C_dict(self):
-        # print "loading c pre.."
+        # print ("loading c pre..")
         return util.load_dict_from_file(config.CONNECTIVE_DICT_PREV_C_PATH)
 
     def get_prevPOS_dict(self):

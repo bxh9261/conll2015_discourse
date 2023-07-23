@@ -27,7 +27,7 @@ class Arg_position_dict():
 
         self.dict_conn_to_root_path = util.load_dict_from_file(config.ARG_POSITION_DICT_CONN_TO_ROOT_PATH)
 
-        # print "Arg_position_dict is loaded..."
+        # print ("Arg_position_dict is loaded...")
 
     def get_dict_CString(self):
         return util.load_dict_from_file(config.ARG_POSITION_DICT_CSTRING)

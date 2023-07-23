@@ -74,8 +74,8 @@ class ConfusionMatrix(object):
         for i in xrange(num_classes):
             row = [self.alphabet.get_label(i)] + [str(self.matrix[i,j]) for j in xrange(num_classes)]
             rows.append(row)
-        print "row = predicted, column = truth"
-        print matrix_to_string(rows, header)
+        print (("row = predicted, column = truth"))
+        print (matrix_to_string(rows, header))
 
     def get_matrix(self):
         num_classes = self.alphabet.size()
@@ -121,7 +121,7 @@ class ConfusionMatrix(object):
         lines.append( '* Overall accuracy rate = %f' %(correct / sum(sum(self.matrix[:,:]))))
         lines.append( '* Average precision %f \t recall %f\t F1 %f' %\
             (numpy.mean(precision), numpy.mean(recall), numpy.mean(f1)))
-        print '\n'.join(lines)
+        print ('\n'.join(lines))
 
     def get_summary(self):
         correct = 0

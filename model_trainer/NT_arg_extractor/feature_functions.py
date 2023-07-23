@@ -2,9 +2,9 @@
 from feature import Feature
 import util
 from NT_dict import NT_dict
-import NT_dict_util as dict_util
+import model_trainer.NT_arg_extractor.NT_dict_util as dict_util
 from syntax_tree import Syntax_tree
-from constituent import Constituent
+from model_trainer.NT_arg_extractor.constituent import Constituent
 from connective_dict import Connectives_dict
 
 dict_clauses = {}

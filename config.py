@@ -4,9 +4,9 @@
 # change the the value of the following two variables
 
 # current working directory.
-CWD = "/Users/Hunter/Documents/pycharmSpace/conll2015_discourse/"
+CWD = "/mnt/c/Users/15856/conll2015_discourse/"
 # mallet bin path
-MALLET_PATH = "/Users/Hunter/Documents/conll2015/mallet"
+MALLET_PATH = "/mnt/c/Users/15856/conll2015_discourse/Mallet-6"
 
 
 

@@ -1,7 +1,8 @@
 #coding:utf-8
 import sys
+from importlib import reload
 reload(sys)
-sys.setdefaultencoding('utf-8')
+#sys.setdefaultencoding('utf-8')
 sys.path.append("./")
 import json
 import parser_util
@@ -40,7 +41,7 @@ import codecs
 
 class DiscourseParser():
     def __init__(self, input_dataset, input_run):
-        self.pdtb_parse = '%s/pdtb-parses.json' % input_dataset
+        self.pdtb_parse = '%s/test.json' % input_dataset
         self.raw_path = '%s/raw' % input_dataset
         self.input_run = input_run
         self.relations = []
@@ -49,7 +50,6 @@ class DiscourseParser():
 
 
         self.documents = json.loads(codecs.open(self.pdtb_parse, encoding="utf-8", errors="ignore").read())
-        
         self.parse_dict = self.documents
 
         pass
@@ -66,7 +66,7 @@ class DiscourseParser():
 
         ''' 1.1 Connective classifier '''
 
-        print "==> Connective classifier:"
+        print (("==> Connective classifier:"))
 
         conn_clf_feature_function = _conn_clf_feature_function
         conn_clf_feat_path = config.PARSER_CONN_CLF_FEATURE
@@ -82,7 +82,7 @@ class DiscourseParser():
 
         ''' 1.2 Arg1 position classifier '''
 
-        print "\n==> Arg1 Position Classifier:"
+        print (("\n==> Arg1 Position Classifier:"))
 
         arg_position_feat_func = _arg_position_feature_function
         arg_position_feat_path = config.PARSER_ARG_POSITION_FEATURE
@@ -99,7 +99,7 @@ class DiscourseParser():
 
         ''' 1.3.1 SS Arguments Extractor '''
 
-        print "\n==> SS Arguments Extractor:"
+        print (("\n==> SS Arguments Extractor:"))
 
         # split the SS_conns_list into SS_conns_parallel_list, SS_conns_not_parallel_list
         # parallel connectives: if..then; either..or;...
@@ -128,7 +128,7 @@ class DiscourseParser():
 
         ''' 1.3.2.1 PS Arg2 extractor '''
 
-        print "\n==> PS Arg2 Extractor:"
+        print (("\n==> PS Arg2 Extractor:"))
 
         # initialize Arg1, Arg2 for PS:
         # previous sentence as Arg1, the sentence which contains the connective as Arg2
@@ -152,7 +152,7 @@ class DiscourseParser():
 
         ''' 1.3.2.2 PS Arg1 extractor '''
 
-        print "\n==> PS Arg1 Extractor:"
+        print (("\n==> PS Arg1 Extractor:"))
 
         PS_Arg1_feat_func = _ps_arg1_extractor_feat_func
         PS_Arg1_feat_path = config.PARSER_PS_ARG1_FEATURE
@@ -172,7 +172,7 @@ class DiscourseParser():
 
         ''' 1.4 Explicit Sense Classifier '''
 
-        print "\n==> Explicit Sense Classifier:"
+        print (("\n==> Explicit Sense Classifier:"))
 
         # all discourse connective: SS + PS
         #conns_list_args:[(source, DocID, sent_index, conn_indices, Arg1, Arg2)...]
@@ -197,7 +197,7 @@ class DiscourseParser():
 
         ''' 2.1 Non-Explicit Sense classifier: on original arguments '''
 
-        print "\n==> Non-Explicit Sense classifier: on original arguments"
+        print (("\n==> Non-Explicit Sense classifier: on original arguments"))
 
         # obtain all adjacent sentence pairs within each paragraph, but not identified in any Explicit relation
         # adjacent_non_exp_list: [(DocID,sent1_index,sent2_index) ]
@@ -231,7 +231,7 @@ class DiscourseParser():
 
         ''' 2.2.1 Implicit Arg1 Extractor'''
 
-        print "\n==> Implicit Arg1 Extractor:"
+        print (("\n==> Implicit Arg1 Extractor:"))
 
         implicit_arg1_feat_func = _implicit_arg1_feat_func
         implicit_arg1_feat_path = config.PARSER_IMPLICIT_ARG1_FEATURE
@@ -249,7 +249,7 @@ class DiscourseParser():
 
         ''' 2.2.2 Implicit Arg2 Extractor'''
 
-        print "\n==> Implicit Arg2 Extractor:"
+        print (("\n==> Implicit Arg2 Extractor:"))
 
         implicit_arg2_feat_func = _implicit_arg2_feat_func
         implicit_arg2_feat_path = config.PARSER_IMPLICIT_ARG2_FEATURE
@@ -270,7 +270,7 @@ class DiscourseParser():
 
         ''' 2.3 Non-Explicit Sense classifier: on refined arguments'''
 
-        print "\n==> Non-Explicit Sense Classifier: on refined arguments"
+        print (("\n==> Non-Explicit Sense Classifier: on refined arguments"))
 
         # change arguments from document offset to (sent_index, sent_offset).
         self.non_explicit_relations = parser_util.change_arg_doc_offset(self.non_explicit_relations, self.parse_dict)
@@ -305,6 +305,13 @@ if __name__ == '__main__':
 
     output = open('%s/output.json' % output_dir, 'w')
     for relation in relations:
-        output.write('%s\n' % json.dumps(relation))
+        # Convert range objects to lists
+        converted_relation = []
+        for item in relation:
+            if isinstance(item, range):
+                item = list(item)
+            converted_relation.append(item)
+
+        output.write('%s\n' % json.dumps(converted_relation))
     output.close()
 

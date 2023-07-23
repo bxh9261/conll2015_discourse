@@ -1,6 +1,6 @@
 #coding:utf-8
 from syntax_tree import Syntax_tree
-from constituent import Constituent
+from model_trainer.NT_arg_extractor.constituent import Constituent
 import config
 from model_trainer.connective_classifier.conn_head_mapper import ConnHeadMapper
 import operator

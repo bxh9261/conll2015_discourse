@@ -13,7 +13,7 @@ def get_mallet_predicted_list(file_path):
     predicted_dict_list = read_mallet_output(file_path)
     predicted_list = []
     for predicted_dict in predicted_dict_list:
-        sort_label = sorted(predicted_dict.iteritems(), key=operator.itemgetter(1),reverse = True)
+        sort_label = sorted(predicted_dict.items(), key=operator.itemgetter(1),reverse = True)
         predicted_list.append(sort_label[0][0])
     return predicted_list
 

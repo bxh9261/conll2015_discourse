@@ -1,7 +1,7 @@
 #coding:utf-8
 from ps_arg2_dict import Ps_arg2_dict
 from feature import Feature
-import ps_arg2_dict_util as dict_util
+import model_trainer.PS_Arg2_extractor.ps_arg2_dict_util as dict_util
 import util
 
 def _all_features(arg_clauses, clause_index, parse_dict):

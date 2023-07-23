@@ -3,7 +3,7 @@ from feature import Feature
 from util import mergeFeatures
 import util
 from syntax_tree import Syntax_tree
-import non_exp_dict_util as dict_util
+import model_trainer.Non_Explicit_classifier.non_exp_dict_util as dict_util
 from non_explicit_dict import Non_Explicit_dict
 import pickle, config, string
 

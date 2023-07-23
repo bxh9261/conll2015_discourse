@@ -1,6 +1,6 @@
 #coding:utf-8
 from arg_position_dict import Arg_position_dict
-import arg_position_dict_util as dict_util
+import model_trainer.arg_position_classifier.arg_position_dict_util as dict_util
 from feature import Feature
 import util
 

@@ -4,7 +4,7 @@ from feature import Feature
 from connective_dict import Connectives_dict
 from syntax_tree import Syntax_tree
 import util
-import conn_dict_util as dict_util
+import model_trainer.connective_classifier.conn_dict_util as dict_util
 
 
 def all_features(parse_dict, DocID, sent_index, conn_indices):

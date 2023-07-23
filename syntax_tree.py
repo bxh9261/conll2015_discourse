@@ -1,6 +1,6 @@
 #coding:utf-8
 import re
-from ete2 import Tree
+from ete3 import Tree
 import config
 import copy
 
@@ -25,7 +25,7 @@ class Syntax_tree:
         pass
 
     def print_tree(self):
-        print self.tree.get_ascii(show_internal=True)
+        print ((self.tree.get_ascii(show_internal=True)))
 
     def get_node_path_to_root(self, node):
         path = ""
@@ -285,7 +285,7 @@ class Syntax_tree:
 if __name__ == "__main__":
 
     parse_tree = "( (S (S (NP (DT Some)) (VP (MD may) (VP (VB have) (VP (VBN forgotten))))) (: --) (CC and) (S (NP (DT some) (JJR younger) (NNS ones)) (VP (MD may) (ADVP (RB never)) (VP (VB have) (ADJP (JJ experienced)) (: --) (SBAR (WHNP (WP what)) (S (NP (PRP it)) (VP (VBZ 's) (VP (VB like) (S (VP (TO to) (VP (VB invest) (PP (IN during) (NP (DT a) (NN recession))))))))))))) (. .)) )"
-    print parse_tree
+    print ((parse_tree))
 
 
 
@@ -294,7 +294,7 @@ if __name__ == "__main__":
     if syntax_tree.tree != None:
         syntax_tree.print_tree()
 
-    print syntax_tree.tree.get_distance(syntax_tree.tree, syntax_tree.get_leaf_node_by_token_index(0))
+    print ((syntax_tree.tree.get_distance(syntax_tree.tree, syntax_tree.get_leaf_node_by_token_index(0))))
 
 
 

@@ -964,4 +964,4 @@ def get_prev_next_context_conn(relation, parse_dict, implicit_context_dict):
 
 
 if __name__ == "__main__":
-    print get_word_MPQA_polarity(('raise', 'verb'))
+    print (get_word_MPQA_polarity(('raise', 'verb')))
